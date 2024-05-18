@@ -1,0 +1,14 @@
+Let's begin fishing!
+deerfish
+deerfish
+You caught 2 deerfishs this time.
+
+Let's begin fishing!
+carp
+carp
+carp
+carp
+carp
+carp
+You caught 6 carps this time.
+
