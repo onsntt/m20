@@ -56,7 +56,38 @@ bool add(int kucha[], int &currentSum)
 
 }
 
-int main(){
+void recheck (int &currentSum )
+ {
+    int checksum = 0;
+    std::ifstream readFile1("state.bin",  std::ios::binary); 
+    if(readFile1.is_open())
+      {
+        int buf = 0;
+        for (int i = 0; i < 1000; i++)
+           {
+             readFile1.read((char*)&buf, sizeof(int)); 
+               if (buf > 0)
+                 {
+                   checksum += buf;
+           
+                 }
+           }
+      readFile1.close();
+      }
+      
+      else std::cout << "Can not recheck!\n";
+      if (checksum == currentSum) 
+        {
+          std::cout << "Data integrity checked.\n";
+        }
+       else
+         {
+           std::cout << "*   *   *\n" << "Somebody stole money from datafile!\n" << currentSum << " in RAM, but only " << checksum << " in datafile.\n" << "* * *   D E R Z H I     V O R A !   * * *\n";
+            
+         } 
+ }
+
+int main() {
 int nal[1000] = {0};    
 bool more = true;
 
@@ -104,9 +135,12 @@ if(!readFile.is_open())
  }
  if (action == '+')
    {
+ 
+      recheck(currentSum);      
+      
       if (!add(nal, currentSum))
         {
-           std::cout << "Adding not performed!\n";
+           std::cout << "Adding not performed!\n" << currentSum << " is availabel.\n" ;
         }
          else
         {
