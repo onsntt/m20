@@ -17,4 +17,15 @@ if (!file.is_open())
        file.write((char*)&number, sizeof(number));
        file.close(); 
      }
+std::ifstream file1("d:\\1\\dev\\4.bin", std::ios::binary);
+
+int bu;
+file1.read((char*)&bu, sizeof(int));
+
+//char rrr[5];
+//int r;
+//file1.read(, sizeof(int));
+//rrr[4] = 0;
+std::cout << bu;
+
 }
