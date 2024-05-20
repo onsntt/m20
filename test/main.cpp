@@ -1,19 +1,18 @@
 #include<iostream>
 #include <fstream>
+#include <vector>
 
-
+//функция добавляет в элементы массива, равные нулю, случайные значения и возвращает true, если добавила больше нуля
 bool add(int kucha[], int &currentSum)
 {
-    
-    currentSum = 0;  
-    
-    int added = 0;
- for (int i = 0; i < 1000; i++)
- {
-    if (kucha[i] == 0)
+  currentSum = 0;  
+  int added = 0;
+  for (int i = 0; i < 1000; i++)
+    {
+      if (kucha[i] == 0)
       {
         switch(rand() % 6)
-         {
+          {
             case 0:
             kucha[i] = 100;
             break;
@@ -32,30 +31,29 @@ bool add(int kucha[], int &currentSum)
             case 5:
             kucha[i] = 5000;
             break;
-         }
+          }
          added += kucha[i];
       }
-     else
-     {
-      currentSum += kucha[i];
-     }
+       else
+         {
+           currentSum += kucha[i];
+         }
+    }
 
- }
- if (added > 0)
- {
-   currentSum += added;
- 
-  std::cout << added << " added" << "\n";
-  return true;
- } 
- else 
- {
-    std::cout << added << " added\n";
-    return false;
- }
+         if (added > 0)
+           {
+              currentSum += added;
+              std::cout << added << " added" << "\n";
+              return true;
+           } 
+             else 
+              {
+                 std::cout << added << " added\n";
+                 return false;
+              }
 
 }
-
+//функция перепроверяет сумму доступных средств, сравнивая значения из памяти и из файла
 void recheck (int &currentSum )
  {
     int checksum = 0;
@@ -86,9 +84,54 @@ void recheck (int &currentSum )
             
          } 
  }
+//функция сортирует вектор, из которого будут делаться наборы на выдачу. Вызывается при пополнениях 
+ void sort(std::vector<int> &vec)
+ {
+  for (int i = vec.size() - 1; i >= 0; i--)
+        {
+            int minInd = 0;
+
+            for (int j = 0; j <=i; j++)
+                if (vec[j] < vec[minInd])
+                {
+                    minInd = j;
+                }
+
+                int temp = vec[i];
+                vec[i] = vec[minInd];
+                vec[minInd] = temp;
+
+                
+        }
+
+ }
+
+ bool iCan(std::vector<int> &money, std::vector<int> &result, int request)
+
+{
+  int ostatok;
+  ostatok = request;
+  
+  for (int i = 0; i < 1000; i++)
+  {
+    if (money[i] <= ostatok && money[i] != 0)
+      {
+        result.push_back(money[i]);
+        ostatok -= money[i];
+        money[i] = 0;
+      }
+         if (ostatok == 0)
+           {
+            return true;            
+           }
+  } 
+  return false;
+}
+
 
 int main() {
 int nal[1000] = {0};    
+std::vector<int> buffer(1000);
 bool more = true;
 
 int currentSum = 0;
@@ -136,7 +179,7 @@ if(!readFile.is_open())
  if (action == '+')
    {
  
-      recheck(currentSum);      
+      //recheck(currentSum);      
       
       if (!add(nal, currentSum))
         {
@@ -148,6 +191,12 @@ if(!readFile.is_open())
           writeFile.write((char*)&nal, sizeof(nal));
           writeFile.close();
           std::cout  << currentSum << " available\n";
+          for(int i = 0; i < 1000; i++)
+          {
+            buffer[i] = nal[i];
+          }
+          sort(buffer);
+          for (int z = 0; z < 1000; z++) std::cout << buffer[z];
         }     
    }
  else if (action == '0')
@@ -159,6 +208,36 @@ if(!readFile.is_open())
  else if (action == '-')
    {
 std::cout << "Yabuchie roga!\n";
+for(int i = 0; i < 1000; i++)
+          {
+            buffer[i] = nal[i];
+          }
+          sort(buffer);
+int zapros;    
+std::vector<int> vec;
+
+std::cin >> zapros;
+if (iCan(buffer, vec, zapros))
+   
+        {
+            for(int i = 0; i < 1000; i++)
+          {
+             nal[i] = buffer[i] ;
+          }
+            for (int i = 0; i < vec.size(); i++)
+            {
+              std::cout << vec[i] << " ";
+            }
+             std::cout << "\n";
+        }
+        else
+        {
+            std::cout << "NE MOGU\n";
+        }
+for (int i = 0; i < 1000; i++)
+  {
+    std::cout << buffer[i] << " ";
+  }
 
    }  
 
